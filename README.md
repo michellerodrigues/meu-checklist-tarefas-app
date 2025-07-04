@@ -39,8 +39,8 @@ Veja a apresentação do site em: https://www.youtube.com/watch?v=J5EoOjXckBQ
 
 1 - Para executar:
   ```
-    > git clone https://github.com/michellerodrigues/meu-checklist-tarefas-mvp.git
-    > cd meu-checklist-tarefas-mvp/front
+    > git clone https://github.com/michellerodrigues/meu-checklist-tarefas-app.git
+    > cd meu-checklist-tarefas-app/front
     > python -m http.server 8005
   ```
     
