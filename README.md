@@ -15,18 +15,23 @@ Veja a apresentação do site em: https://www.youtube.com/watch?v=J5EoOjXckBQ
 
 ![fluxo_completo](https://github.com/user-attachments/assets/beb3dc38-6277-4e82-adb0-34020c4abcc3)
 
+
 ## Expectativa x MVP (Frontend entregue - versão web)
 
 1 - Tela de Login
+
 ![image](https://github.com/user-attachments/assets/14a04544-b879-4313-ae9b-ddd055b5ec07)
 
 2 - Tela de Cadastro
+
 ![image](https://github.com/user-attachments/assets/50331b2b-1c65-4eee-abd9-7d54ca6ed842)
 
 3 - Tela de Questionário
+
 ![image](https://github.com/user-attachments/assets/695a4bb0-f08a-40db-a35c-200f0d52e426)
 
 4 - Painel do Usuário
+
 ![image](https://github.com/user-attachments/assets/9ce0493c-f579-4547-a79f-141c56a75b9e)
 
 
