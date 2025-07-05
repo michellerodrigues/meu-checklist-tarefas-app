@@ -1,5 +1,6 @@
 import { carregarTarefasUsuario } from './scripts.js';
 import { carregarRecorrenciaTarefas } from './scripts.js';
+import { carregarCategoriasParaNovaTarefa } from './scripts.js';
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -28,49 +29,71 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     
-    // Simular carregamento de categorias (substitua por chamada AJAX real)
-    document.addEventListener('DOMContentLoaded', function() {
-        // Simulando categorias do banco de dados
-        const categories = [
-            {id: 1, name: 'Trabalho'},
-            {id: 2, name: 'Estudo'},
-            {id: 3, name: 'Casa'},
-            {id: 4, name: 'Lazer'},
-            {id: 5, name: 'Plantas'}
-        ];
-        
-        const categorySelect = document.getElementById('category');
-        categories.forEach(function(category) {
-            const option = document.createElement('option');
-            option.value = category.id;
-            option.textContent = category.name;
-            categorySelect.appendChild(option);
-        });
-    });
-    
-    // Manipular envio do formulário
-    document.getElementById('taskForm').onsubmit = function(e) {
-        e.preventDefault();
-        
-        // Capturar valores do formulário
-        const taskName = document.getElementById('taskName').value;
-        const recurrence = document.getElementById('recurrence').value;
-        const categoryId = document.getElementById('category').value;
-        
-        // Aqui você faria a chamada AJAX para salvar no banco de dados
-        console.log('Tarefa a ser salva:', {
-            descricao: taskName,
-            recorrencia: recurrence,
-            categoria_id: categoryId
-        });
-        
-        // Fechar modal e limpar formulário
-        document.getElementById('taskModal').style.display = 'none';
-        this.reset();
-        
-        // Mostrar mensagem de sucesso (opcional)
-        alert('Tarefa salva com sucesso!');
-    };
+    const taskNameInput = document.getElementById('taskName');
 
-    //fim tarefa.js
+    taskNameInput.addEventListener('blur', function(event) {
+
+        const nomeTarefa = this.value.trim()
+
+        if (nomeTarefa !== '') {
+            console.log('usuário acabou de preencher a tarefa',nomeTarefa);            
+            carregarCategoriasParaNovaTarefa(nomeTarefa)
+        }
+    });
+
+    try{
+        // Manipular envio do formulário
+        document.getElementById('taskForm').onsubmit = async function(e) {
+                e.preventDefault();        
+                // Capturar valores do formulário
+                const nomeTarefa = document.getElementById('taskName').value;
+                const recorrenciaIdTarefa = document.getElementById('recorrenciaSelect').value;
+                const categoriaIdSelecionada = document.getElementById('categoriaSelect').value;
+
+                //TODO: futuramenta associar ao banco as hashtags do usuário, uma vez que ele não precisou responder ao questionário para criar a mesma
+                const tagsTarefa = '["#criadaPeloUsuario"]' 
+
+                console.log('Tarefa a ser salva:', {
+                    descricao: nomeTarefa,
+                    recorrencia: recorrenciaIdTarefa,
+                    categoria_id: categoriaIdSelecionada
+                });
+
+                const responseTarefaCriada = await fetch('http://127.0.0.1:8002/api/tarefas', {
+                    mode: 'cors', 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        descricao: nomeTarefa,
+                        categoria_id: categoriaIdSelecionada,
+                        recorrencia_id: recorrenciaIdTarefa,
+                        tags: tagsTarefa
+                    })
+
+                    //TODO: criei uma pergunta "Usuário deseja criar novas tarefas?" (1)
+                    //Se ele disser sim (opção 39), vamos incluir a hashtag ['#CriadaPeloUsuario']
+                    //ao receber uma nova tarefa, teremos que adicionar ao questionário respondido dele essa resposta
+                    //A opção "Sim" opção 39 da pergunta 1 
+                    //Assim, a nova tarefa dele vai aparecer na cagegoria certinha
+                    //TODO: recarregar o painel do usuário depois de uma nova inserção de tarefa
+                });
+
+                if (responseTarefaCriada.ok) {
+                    alert('Tarefa criada com sucesso!');
+                                       
+                    // Fechar modal e limpar formulário             
+                    document.getElementById('taskModal').style.display = 'none';
+                    this.reset();                
+                    window.location.href = '.././painelUsuario.html';
+                } else {
+                    throw new Error('Falha ao enviar respostas');
+                }
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro ao enviar suas respostas. Tente novamente.');
+        }
+      //fim tarefa.js
 });

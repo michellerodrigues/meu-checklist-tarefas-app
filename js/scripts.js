@@ -190,39 +190,18 @@ function filtrarTarefasDoUsuario(data, tags) {
 
 // Função para criar o combobox de recorrência
 export async function criarComboboxRecorrencia(recorrencias) {
-    // Criar o container principal
-    const formGroup = document.createElement('div');
-    formGroup.className = 'form-group';
+      
+    const comboRecorrenciasElemento = document.getElementById('comboRecorrencias');
     
-    // Criar o label
-    const label = document.createElement('label');
-    label.htmlFor = 'recorrencia';
-    label.textContent = 'Recorrência:';
-    
-    // Criar o select
-    const select = document.createElement('select');
-    select.id = 'recorrencia';
-    select.name = 'recorrencia';
-    
-    // Adicionar opção padrão "Nenhuma"
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Nenhuma';
-    select.appendChild(defaultOption);
-    
-    // Adicionar opções dinâmicas a partir do JSON
+    const selectRecorrencias = document.getElementById('recorrenciaSelect');
+
+    // TODO: colocar a combo abrindo para baixo se der tempo
     recorrencias.forEach(recorrencia => {
         const option = document.createElement('option');
-        option.value = recorrencia.Id;
+        option.value = recorrencia.id;
         option.textContent = recorrencia.descricao;
-        select.appendChild(option);
+        selectRecorrencias.appendChild(option);
     });
-    
-    // Montar a estrutura
-    formGroup.appendChild(label);
-    formGroup.appendChild(select);
-    
-    return formGroup;
 }
 
 export async function carregarRecorrenciaTarefas()
@@ -241,16 +220,55 @@ export async function carregarRecorrenciaTarefas()
         
         const recorrencias = await response.json();        
        
-        const formNovaTarefa = criarComboboxRecorrencia(recorrencias);
+        criarComboboxRecorrencia(recorrencias);
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        return [];
+    }
+}
 
 
-        const taskForm = document.getElementById('taskForm');
-        if (!taskForm) {
-            throw new Error('Formulário não encontrado');
+export async function criarComboboxCategoria(categorias) {
+      
+    const comboCategoriasElemento = document.getElementById('comboCategorias');
+    
+    const selectCategorias = document.getElementById('categoriaSelect');
+
+    selectCategorias.innerHTML = '<option value="">Nenhuma</option>';
+    
+    // TODO: colocar a combo abrindo para baixo se der tempo
+    categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.descricao;
+        option.selected = cat.selecionado;
+        selectCategorias.appendChild(option);
+    });
+}
+
+
+export async function carregarCategoriasParaNovaTarefa(nomeTarefa)
+{
+    try {
+
+        const encodedTarefa = encodeURIComponent(nomeTarefa);
+        const url = `http://127.0.0.1:8002/api/categorias/ml/${encodedTarefa}`;
+
+        const response = await fetch(url, {
+            mode: 'cors', 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro na requisição');
         }
         
-        taskForm.appendChild(formNovaTarefa);
-
+        const categoriaResponse = await response.json();        
+       
+        criarComboboxCategoria(categoriaResponse.categorias);
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         return [];
