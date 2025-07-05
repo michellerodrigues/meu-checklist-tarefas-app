@@ -1,4 +1,6 @@
 import { carregarTarefasUsuario } from './scripts.js';
+import { carregarRecorrenciaTarefas } from './scripts.js';
+
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log("O documento está pronto: painel Usuário!");
@@ -11,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //Tarefas.js ==> modularizar se der tempo
     document.getElementById('abrirModalNovaTarefa').onclick = function() {
         document.getElementById('taskModal').style.display = 'block';
+        carregarRecorrenciaTarefas();
     }
 
      // Fechar modal

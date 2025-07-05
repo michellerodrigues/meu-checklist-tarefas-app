@@ -241,13 +241,18 @@ export async function carregarRecorrenciaTarefas()
         
         const recorrencias = await response.json();        
        
-        criarComboboxRecorrencia(recorrencias);
+        const formNovaTarefa = criarComboboxRecorrencia(recorrencias);
 
-        document.getElementById('taskForm').appendChild(formGroup);
+
+        const taskForm = document.getElementById('taskForm');
+        if (!taskForm) {
+            throw new Error('Formulário não encontrado');
+        }
+        
+        taskForm.appendChild(formNovaTarefa);
 
     } catch (error) {
         console.error('Erro ao buscar dados:', error);
         return [];
     }
-
 }
