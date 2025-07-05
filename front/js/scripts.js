@@ -187,3 +187,67 @@ function filtrarTarefasDoUsuario(data, tags) {
         return null;
     }).filter(categoria => categoria !== null);
 }
+
+// Função para criar o combobox de recorrência
+export async function criarComboboxRecorrencia(recorrencias) {
+    // Criar o container principal
+    const formGroup = document.createElement('div');
+    formGroup.className = 'form-group';
+    
+    // Criar o label
+    const label = document.createElement('label');
+    label.htmlFor = 'recorrencia';
+    label.textContent = 'Recorrência:';
+    
+    // Criar o select
+    const select = document.createElement('select');
+    select.id = 'recorrencia';
+    select.name = 'recorrencia';
+    
+    // Adicionar opção padrão "Nenhuma"
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Nenhuma';
+    select.appendChild(defaultOption);
+    
+    // Adicionar opções dinâmicas a partir do JSON
+    recorrencias.forEach(recorrencia => {
+        const option = document.createElement('option');
+        option.value = recorrencia.Id;
+        option.textContent = recorrencia.descricao;
+        select.appendChild(option);
+    });
+    
+    // Montar a estrutura
+    formGroup.appendChild(label);
+    formGroup.appendChild(select);
+    
+    return formGroup;
+}
+
+export async function carregarRecorrenciaTarefas()
+{
+    try {
+        const response = await fetch(`http://127.0.0.1:8002/api/recorrencias/`, {
+            mode: 'cors', 
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+
+        if (!response.ok) {
+            throw new Error('Erro na requisição');
+        }
+        
+        const recorrencias = await response.json();        
+       
+        criarComboboxRecorrencia(recorrencias);
+
+        document.getElementById('taskForm').appendChild(formGroup);
+
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+        return [];
+    }
+
+}
