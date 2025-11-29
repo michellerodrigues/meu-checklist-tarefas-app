@@ -43,9 +43,10 @@ Veja a apresentação do site em: https://www.youtube.com/watch?v=J5EoOjXckBQ
     > cd meu-checklist-tarefas-app
     > python -m http.server 8005
   ```
+
+2 - Acessar no navegador: http://localhost:8005/
     
-    
-2 - Estrutura de Pastas
+3 - Estrutura de Pastas
 ```text
 ./front
 ├── cadastro.css
