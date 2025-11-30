@@ -167,12 +167,13 @@ Vantagens:
 1 - Para executar:
   ```
     > git clone https://github.com/michellerodrigues/meu-checklist-tarefas-app.git
-    > cd meu-checklist-tarefas-app/front
+    > cd meu-checklist-tarefas-app
     > python -m http.server 8005
   ```
+
+2 - Acessar no navegador: http://localhost:8005/
     
-    
-2 - Estrutura de Pastas
+3 - Estrutura de Pastas
 ```text
 ./front
 ├── cadastro.css
